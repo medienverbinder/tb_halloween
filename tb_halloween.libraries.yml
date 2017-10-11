@@ -1,0 +1,28 @@
+tb_halloween:
+  remote: https://www.drupal.org/project/tb_halloween
+  version: VERSION
+  license:
+    name: MIT
+    url: https://www.drupal.org/project/tb_halloween
+  css:
+    theme:
+      css/assets.tb_halloween.css: {}
+      css/drupal.tb_halloween.css: {}
+  js:
+    js/assets.tb_halloween.js: {}
+    js/drupal.tb_halloween.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+    - core/drupalSettings
+
+tb_halloween_config:
+  js:
+    js/config.tb_halloween.js: {}
+  css:
+      theme:
+        css/config.tb_halloween.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

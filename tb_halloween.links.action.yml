@@ -1,0 +1,5 @@
+entity.pumpkin.add_form:
+  route_name: entity.pumpkin.add_form
+  title: 'Add Pumpkin'
+  appears_on:
+    - entity.pumpkin.collection

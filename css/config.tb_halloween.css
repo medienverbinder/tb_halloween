@@ -1,0 +1,8 @@
+.form-item-image a img {
+    margin: 3px;
+}
+
+.form-item-image a.selected img {
+    margin: 2px;
+    border: solid 1px #FF0000;
+}

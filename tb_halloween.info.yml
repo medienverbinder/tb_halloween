@@ -1,0 +1,6 @@
+name: TB Halloween D8 Port
+type: module
+description: A simple port of the awesome ThemeBrain Halloween D7 Module.
+version: '8.x-1.0'
+core: '8.x'
+project: 'halloween'

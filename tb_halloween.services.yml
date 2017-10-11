@@ -1,0 +1,4 @@
+services:
+  tb_halloween:
+    class: Drupal\tb_halloween\TBHalloween
+    arguments: ['@path.matcher', '@path.alias_manager', '@config.factory', '@router.admin_context']

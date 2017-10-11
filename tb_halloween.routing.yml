@@ -1,0 +1,7 @@
+tb_halloween.settings:
+  path: '/admin/config/media/tb_halloween'
+  defaults:
+    _controller: '\Drupal\tb_halloween\Controller\TBHalloweenConfigurationController::configure'
+    _title: 'Theme Brain Halloween Configuration'
+  requirements:
+    _permission: 'administer site configuration'

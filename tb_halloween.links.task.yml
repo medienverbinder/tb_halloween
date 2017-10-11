@@ -1,0 +1,29 @@
+pumpkin.home:
+  title: Path
+  route_name: tb_halloween.settings
+  base_route: tb_halloween.settings
+  weight: 0
+
+pumpkin.tab1:
+  title: Pumpkins
+  route_name: entity.pumpkin.collection
+  base_route: tb_halloween.settings
+  weight: 1
+
+pumpkin.tab1.list1:
+  title: Pumpkins
+  route_name: entity.pumpkin.collection
+  parent_id: pumpkin.tab1
+  weight: 2
+
+pumpkin.tab1.list2:
+  title: Add Pumpkin
+  route_name: entity.pumpkin.add_form
+  parent_id: pumpkin.tab1
+  weight: 3
+
+pumpkin.tab1.list3:
+  title: Edit Pumpkin
+  route_name: entity.pumpkin.edit_form
+  parent_id: pumpkin.tab1
+  weight: 4

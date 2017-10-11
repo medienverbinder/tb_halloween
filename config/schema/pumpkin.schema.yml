@@ -1,0 +1,57 @@
+tb_halloween.pumpkin.*:
+  type: config_entity
+  label: 'Pumpkin config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    pumpkin_image:
+      type: string
+      label: 'Pumpkin Image'
+    size:
+      type: string
+      label: 'Size of flying pumpkin'
+    hover_message:
+      type: string
+      label: 'Hover message'
+    animation_type:
+      type: string
+      label: 'Animation type'
+    number_pumpkins:
+      type: integer
+      label: 'Number of pumpkins'
+    animation_area:
+      type: string
+      label: 'Animation area'
+    flying_speed:
+      type: integer
+      label: 'Flying speed'
+    swing_speed:
+      type: integer
+      label: 'Swing speed'
+    delay_time:
+      type: integer
+      label: 'Delay Time'
+    delaystart_time:
+      type: integer
+      label: 'Delay time'
+    start_frame:
+      type: integer
+      label: 'Start at frame #no:'
+    closeable:
+      type: string
+      label: 'Closeable'
+    preset:
+      type: string
+      label: 'Preset'
+    custom_preset:
+      type: string
+      label: 'Preset'
+    extend_class:
+      type: string
+      label: 'Custom css class name'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string

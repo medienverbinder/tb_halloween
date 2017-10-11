@@ -1,0 +1,12 @@
+tb_halloween.settings:
+  title: Halloween Configuration
+  description: 'Halloween Configuration'
+  parent: system.admin_config_media
+  route_name: tb_halloween.settings
+
+entity.pumpkin.collection:
+  title: 'Pumpkin'
+  route_name: entity.pumpkin.collection
+  description: 'List Pumpkin (bundles)'
+  parent: system.admin_structure
+  weight: 99

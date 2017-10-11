@@ -1,0 +1,258 @@
+<?php
+
+use Drupal\Core\Url;
+use Drupal\tb_halloween\Entity\Pumpkin;
+
+/**
+ * @file
+ * Drupal 8 port tb_halloween by medienverbinder.
+ */
+
+
+/**
+ * Alter attachments (typically assets) to a page before it is rendered.
+ *
+ * Use this hook when you want to remove or alter attachments on the page, or
+ * add attachments to the page that depend on another module's attachments (this
+ * hook runs after hook_page_attachments().
+ */
+function tb_halloween_page_attachments_alter(array &$attachments) {
+
+  $current_url = Url::fromRoute('<current>');
+  $halloween   = \Drupal::service('tb_halloween');
+  $halloween->isTBHalloweenEnabledPath($current_url);
+
+  if ($halloween->isTBHalloweenEnabledPath($current_url)) {
+
+    $attachments['#attached']['library'][] = 'tb_halloween/tb_halloween';
+    $attachments['#attached']['drupalSettings']['tb_halloween']['tb_halloween_config'] = tb_halloween_getPumpkins();
+    $attachments['#attached']['drupalSettings']['tb_halloween']['tb_halloween_path']   = drupal_get_path('module', 'tb_halloween');
+  }
+}
+
+function tb_halloween_get_thumbs()
+{
+  return [
+    'pumpkin' => [
+      'thumb' => file_create_url(drupal_get_path('module', 'tb_halloween') . '/images/pumpkin-thumb.png'),
+      'size' => [
+        'default' => [
+          'width' => 188,
+          'height' => 129,
+        ],
+        'small' => [
+          'width' => 125,
+          'height' => 86,
+        ],
+        'big' => [
+          'width' => 250,
+          'height' => 172,
+        ],
+      ],
+      'frame' => 17,
+    ],
+    'drupal' => [
+      'thumb' => file_create_url(drupal_get_path('module', 'tb_halloween') . '/images/drupal-pump-thumb.png'),
+      'size' => [
+        'default' => [
+          'width' => 188,
+          'height' => 129,
+        ],
+        'small' => [
+          'width' => 125,
+          'height' => 86,
+        ],
+        'big' => [
+          'width' => 250,
+          'height' => 172,
+        ],
+      ],
+      'frame' => 34,
+    ],
+    'drupal-pump' => [
+      'thumb' => file_create_url(drupal_get_path('module', 'tb_halloween') . '/images/drupal-thumb.png'),
+      'size' => [
+        'default' => [
+          'width' => 188,
+          'height' => 129,
+        ],
+        'small' => [
+          'width' => 125,
+          'height' => 86,
+        ],
+        'big' => [
+          'width' => 250,
+          'height' => 172,
+        ],
+      ],
+      'frame' => 17,
+    ],
+  ];
+}
+
+function tb_halloween_default_pumpkin() {
+
+  $item = new stdClass();
+  $item->pumpkin_image = 'pumpkin';
+  $item->size = 'default';
+  $item->number_pumpkins = 1;
+  $item->hover_message = t("Wish you a scary Halloween!");
+  $item->animation_type = 'random';
+  $item->preset = 'custom_preset';
+  $item->custom_preset = '300, 300, 100, 100, 1000, 100, 1000, 500, 100, 500';
+  $item->animation_area = '';
+  $item->flying_speed = 'default';
+  $item->swing_speed = 'default';
+  $item->delay_time = 200;
+  $item->delaystart_time = 1000;
+  $item->start_frame = 0;
+  $item->closable = 'no';
+  $item->extend_class = '';
+
+  return $item;
+
+}
+
+function tb_halloween_sizes_options() {
+  $options = [
+    'default' => t("Default"),
+    'small' => t("Small"),
+    'big' => t('Big'),
+  ];
+  return $options;
+}
+
+function tb_halloween_animation_types_options() {
+  $options = [
+    'random' => t("Random"),
+    'preset' => t("Path"),
+  ];
+  return $options;
+}
+
+function tb_halloween_presets_options() {
+  $options = [
+    '300, 300, 100, 100, 1000, 100, 1000, 500, 100, 500' => t("Path A"),
+    '300, 300, 1000, 100, 100, 100, 100, 500, 1000, 500' => t("Path B"),
+    'custom_preset' => t("Custom path"),
+  ];
+  return $options;
+}
+
+function tb_halloween_number_pumpkins_options() {
+  $options = [];
+
+  for ($i = 1; $i < 11; $i++) {
+    $options[$i] = t("@i instance@s", [
+      "@i" => $i,
+      "@s" => ($i > 1) ? "s" : "",
+    ]);
+  }
+
+  return $options;
+}
+
+
+function tb_halloween_get_flying_speed_options() {
+  $options = [
+    3000 => t("Default"),
+    4500 => t("Slow"),
+    1500 => t("Fast"),
+  ];
+  return $options;
+}
+
+function tb_halloween_get_swing_speed_options() {
+  $options = [
+    40 => t("Default"),
+    25 => t("Slow"),
+    60 => t("Fast"),
+  ];
+  return $options;
+}
+
+function tb_halloween_closeable_options() {
+  $options = [
+    0 => t("No"),
+    1 => t("Yes - Temporary"),
+    2 => t("Yes - Permanent"),
+  ];
+  return $options;
+}
+
+function tb_halloween_get_thumb($key, $size) {
+
+  if (!in_array($size, ['small', 'big', 'default'])) {
+    $size = 'default';
+  }
+
+  return file_create_url(drupal_get_path('module', 'tb_halloween') . '/images/' . $key . '-thumb-' . $size . '.png');
+}
+
+function tb_halloween_get_image($key, $size) {
+  if (!in_array($size, ['small', 'big', 'default'])) {
+    $size = 'default';
+  }
+  return file_create_url(drupal_get_path('module', 'tb_halloween') . '/images/' . $key . '-' . $size . '.png');
+}
+
+
+function tb_halloween_getPumpkins() {
+
+  $json = [];
+  $thumbs = tb_halloween_get_thumbs();
+  $config = Pumpkin::loadMultiple();
+  $pumpkinArr = [];
+  $count = 0;
+
+  foreach ($config as $entity) {
+
+    $pumpkinArr['number_pumpkins'] = intval($entity->number_pumpkins);
+    $pumpkinArr['image'] = tb_halloween_get_image($entity->pumpkin_image, $entity->size);
+    $pumpkinArr['hover_message'] = $entity->hover_message;
+
+    if (!empty($entity->animation_area)) {
+
+      $parts = explode(",", $entity->animation_area);
+
+      if (count($parts) == 4) {
+        $pumpkinArr['area_left'] = intval($parts[0]);
+        $pumpkinArr['area_top'] = intval($parts[1]);
+        $pumpkinArr['area_right'] = intval($parts[2]);
+        $pumpkinArr['area_bottom'] = intval($parts[3]);
+      }
+      else {
+        $pumpkinArr['animation_area'] = FALSE;
+      }
+    }
+
+    $pumpkinArr['flying_speed'] = intval($entity->flying_speed);
+    $pumpkinArr['swing_speed'] = intval($entity->swing_speed);
+    $pumpkinArr['delay_time'] = intval($entity->delay_time);
+    $pumpkinArr['delaystart_time'] = intval($entity->delaystart_time);
+    $pumpkinArr['start_frame'] = intval($entity->start_frame);
+    $pumpkinArr['closeable'] = intval($entity->closeable);
+    $pumpkinArr['width'] = $thumbs[$entity->pumpkin_image]['size'][$entity->size]['width'];
+    $pumpkinArr['height'] = $thumbs[$entity->pumpkin_image]['size'][$entity->size]['height'];
+    $pumpkinArr['frame'] = $thumbs[$entity->pumpkin_image]['frame'];
+    $pumpkinArr['animation_type'] = $entity->animation_type;
+
+    $preset = $entity->preset;
+    $custom_preset = $entity->custom_preset;
+    $t = $preset == 'custom_preset' ? $custom_preset : $preset;
+    $parts = explode(",", $t);
+    $pumpkinArr['pos_array'] = [];
+
+    for ($i = 0; $i < count($parts); $i++) {
+      $pumpkinArr['pos_array'][] = intval($parts[$i]);
+    }
+
+    for ($i = 0; $i < $entity->number_pumpkins; $i++) {
+      $json[$count][$i] = $pumpkinArr;
+    }
+
+    $count++;
+  }
+
+  return $json;
+}
